@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Overall Flow Diagram</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+    body {
+      background: #09090b;
+      color: #f4f4f5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 1200px;
+      height: 720px;
+      padding: 30px;
+    }
+    .container {
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 50% 0%, #18181b 0%, #09090b 100%);
+      border: 1px solid #27272a;
+      border-radius: 24px;
+      padding: 36px 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    .header h1 {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      background: linear-gradient(to right, #ffffff, #fda4af, #f43f5e);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 6px;
+    }
+    .header p {
+      font-size: 13px;
+      color: #a1a1aa;
+    }
+    
+    .pipeline {
+      background: rgba(24, 24, 27, 0.6);
+      border: 1px solid #27272a;
+      border-radius: 18px;
+      padding: 20px 24px;
+    }
+    .pipeline-title {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .pipeline-title.upload {
+      color: #f43f5e;
+    }
+    .pipeline-title.fetch {
+      color: #38bdf8;
+    }
+    
+    .flow-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    
+    .card {
+      flex: 1;
+      background: #121215;
+      border: 1px solid #27272a;
+      border-radius: 14px;
+      padding: 14px 16px;
+      min-height: 120px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.2s;
+      position: relative;
+    }
+    .card.highlight-pink {
+      border-color: rgba(244, 63, 94, 0.4);
+      background: linear-gradient(180deg, rgba(244, 63, 94, 0.08) 0%, rgba(18, 18, 21, 0.9) 100%);
+    }
+    .card.highlight-blue {
+      border-color: rgba(56, 189, 248, 0.4);
+      background: linear-gradient(180deg, rgba(56, 189, 248, 0.08) 0%, rgba(18, 18, 21, 0.9) 100%);
+    }
+    .card.highlight-purple {
+      border-color: rgba(168, 85, 247, 0.4);
+      background: linear-gradient(180deg, rgba(168, 85, 247, 0.08) 0%, rgba(18, 18, 21, 0.9) 100%);
+    }
+    .card.highlight-emerald {
+      border-color: rgba(16, 185, 129, 0.4);
+      background: linear-gradient(180deg, rgba(16, 185, 129, 0.08) 0%, rgba(18, 18, 21, 0.9) 100%);
+    }
+    
+    .step-badge {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      line-height: 20px;
+      text-align: center;
+      border-radius: 50%;
+      font-size: 11px;
+      font-weight: 700;
+      background: #27272a;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+    .step-badge.pink { background: #f43f5e; }
+    .step-badge.blue { background: #0284c7; }
+    
+    .card-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #fafafa;
+      margin-bottom: 4px;
+    }
+    .card-desc {
+      font-size: 11.5px;
+      color: #a1a1aa;
+      line-height: 1.35;
+    }
+    .card-pill {
+      display: inline-block;
+      align-self: flex-start;
+      margin-top: 8px;
+      padding: 3px 8px;
+      background: #18181b;
+      border: 1px solid #3f3f46;
+      border-radius: 6px;
+      font-size: 10px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      color: #e4e4e7;
+    }
+
+    .arrow {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #71717a;
+      font-size: 18px;
+      flex-shrink: 0;
+      padding: 0 2px;
+    }
+    .arrow-label {
+      font-size: 9.5px;
+      color: #a1a1aa;
+      font-weight: 600;
+      margin-bottom: 2px;
+      white-space: nowrap;
+    }
+    
+    .footer-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 10px;
+      border-top: 1px solid #27272a;
+      font-size: 11px;
+      color: #71717a;
+    }
+    .footer-bar span {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .indicator {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 8px #10b981;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    
+    <!-- Top Header -->
+    <div class="header">
+      <h1>Overall Architecture & Data Flow</h1>
+      <p>Decoupled Full-Stack Architecture for Media Upload, Cloud Storage, and Content Delivery</p>
+    </div>
+
+    <!-- Upload Flow Pipeline -->
+    <div class="pipeline">
+      <div class="pipeline-title upload">
+        <span>⚡ Flow A: Image Upload & Storage Lifecycle</span>
+      </div>
+      <div class="flow-row">
+        
+        <!-- Step 1 -->
+        <div class="card highlight-pink">
+          <div>
+            <span class="step-badge pink">1</span>
+            <div class="card-title">React Client</div>
+            <div class="card-desc">User selects image & enters caption in Create_post.jsx</div>
+          </div>
+          <span class="card-pill">FormData (multipart)</span>
+        </div>
+
+        <div class="arrow">
+          <span class="arrow-label">POST /post</span>
+          ➔
+        </div>
+
+        <!-- Step 2 -->
+        <div class="card highlight-pink">
+          <div>
+            <span class="step-badge pink">2</span>
+            <div class="card-title">Express & Multer</div>
+            <div class="card-desc">Buffers incoming file into RAM memoryStorage buffer</div>
+          </div>
+          <span class="card-pill">req.file.buffer</span>
+        </div>
+
+        <div class="arrow">
+          <span class="arrow-label">base64 stream</span>
+          ➔
+        </div>
+
+        <!-- Step 3 -->
+        <div class="card highlight-purple">
+          <div>
+            <span class="step-badge pink">3</span>
+            <div class="card-title">ImageKit Cloud</div>
+            <div class="card-desc">Processes, stores image & issues public CDN URL</div>
+          </div>
+          <span class="card-pill">https://ik.imagekit.io/...</span>
+        </div>
+
+        <div class="arrow">
+          <span class="arrow-label">Save {url, caption}</span>
+          ➔
+        </div>
+
+        <!-- Step 4 -->
+        <div class="card highlight-emerald">
+          <div>
+            <span class="step-badge pink">4</span>
+            <div class="card-title">MongoDB Atlas</div>
+            <div class="card-desc">Persists post metadata into Post collection</div>
+          </div>
+          <span class="card-pill">Post.create(...)</span>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Retrieval Flow Pipeline -->
+    <div class="pipeline">
+      <div class="pipeline-title fetch">
+        <span>🌐 Flow B: Feed Retrieval & CDN Streaming Lifecycle</span>
+      </div>
+      <div class="flow-row">
+        
+        <!-- Step 5 -->
+        <div class="card highlight-blue">
+          <div>
+            <span class="step-badge blue">1</span>
+            <div class="card-title">Feeds Page</div>
+            <div class="card-desc">Component mounts and queries backend on load</div>
+          </div>
+          <span class="card-pill">GET /post</span>
+        </div>
+
+        <div class="arrow">
+          <span class="arrow-label">Query</span>
+          ➔
+        </div>
+
+        <!-- Step 6 -->
+        <div class="card highlight-emerald">
+          <div>
+            <span class="step-badge blue">2</span>
+            <div class="card-title">MongoDB Query</div>
+            <div class="card-desc">Fetches posts sorted newest first (_id: -1)</div>
+          </div>
+          <span class="card-pill">Post.find().sort(...)</span>
+        </div>
+
+        <div class="arrow">
+          <span class="arrow-label">JSON Array</span>
+          ➔
+        </div>
+
+        <!-- Step 7 -->
+        <div class="card highlight-blue">
+          <div>
+            <span class="step-badge blue">3</span>
+            <div class="card-title">Card Grid View</div>
+            <div class="card-desc">Renders post cards and passes URL into &lt;img&gt;</div>
+          </div>
+          <span class="card-pill">&lt;img src={url} /&gt;</span>
+        </div>
+
+        <div class="arrow">
+          <span class="arrow-label">Edge Cache</span>
+          ➔
+        </div>
+
+        <!-- Step 8 -->
+        <div class="card highlight-purple">
+          <div>
+            <span class="step-badge blue">4</span>
+            <div class="card-title">ImageKit CDN Edge</div>
+            <div class="card-desc">Streams optimized media directly to user's browser</div>
+          </div>
+          <span class="card-pill">Global CDN Delivery</span>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Footer Bar -->
+    <div class="footer-bar">
+      <span><div class="indicator"></div> MERN Stack + ImageKit Media Pipeline</span>
+      <span>Express (:3000) • React Vite (:5173) • MongoDB Atlas • ImageKit CDN</span>
+    </div>
+
+  </div>
+</body>
+</html>
