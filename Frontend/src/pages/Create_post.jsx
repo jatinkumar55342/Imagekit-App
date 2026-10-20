@@ -44,8 +44,10 @@ export default function Create_post() {
 
           <button
             type="submit"
-            className="w-full rounded-xl border border-rose-900/60 bg-rose-950/80 p-3 text-base font-semibold text-zinc-100 hover:bg-rose-900 disabled:opacity-50 transition-colors"
-            >
+            disabled={loading || !file}
+            className="w-full rounded-xl border border-rose-900/60 bg-rose-950/80 p-3 text-base font-semibold text-zinc-100 hover:bg-rose-900 disabled:opacity-50 transition-colors cursor-pointer disabled:cursor-not-allowed"
+          >
+            {loading ? 'Creating...' : 'Create Post'}
           </button>
         </form>
       </div>
