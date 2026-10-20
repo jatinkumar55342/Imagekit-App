@@ -26,7 +26,7 @@ app.post('/post', upload.single('image'), async (req, res) => {
 });
 
 app.get('/post', async (req, res) => {
-    const posts = await Post.find();
+    const posts = await Post.find().sort(-1);
     res.status(200).json({ data: posts });
   
 });
