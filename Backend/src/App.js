@@ -7,11 +7,11 @@ const imagekit = require('./services/imagekit.service');
 const app = express();
 const upload = multer({ storage: multer.memoryStorage() });
 
-// app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: "1mb" }));
+
 const allowedOrigins = (process.env.CLIENT_URL || "")
   .split(",")
-  .map((url) => url.trim())
+  .map((url) => url.trim().replace(/\/$/, ""))
   .filter(Boolean);
 
 const corsOptions = {
@@ -46,8 +46,13 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.use(express.json({ limit: "1mb" }));
+
+app.get('/', (req, res) => {
+  res.send('Backend API is running. Access the frontend application at http://localhost:5173');
+});
+
 app.post('/post', upload.single('image'), async (req, res) => {
+  try {
     const result = await imagekit.upload({
       file: req.file.buffer.toString('base64'),
       fileName: req.file.originalname,
@@ -59,13 +64,18 @@ app.post('/post', upload.single('image'), async (req, res) => {
     });
 
     res.status(201).json({ message: 'Post created', data: newPost });
-  
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 app.get('/post', async (req, res) => {
-    const posts = await Post.find().sort(-1);
+  try {
+    const posts = await Post.find().sort({ _id: -1 });
     res.status(200).json({ data: posts });
-  
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 module.exports = app;
