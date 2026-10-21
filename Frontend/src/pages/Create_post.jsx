@@ -6,14 +6,21 @@ export default function Create_post() {
   const [file, setFile] = useState(null);
   const [caption, setCaption] = useState('');
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true)
+    setLoading(true);
+    setError(null);
+    try {
       await createPost(file, caption);
       navigate('/feeds');
-    setLoading(false)
+    } catch (err) {
+      setError(err?.response?.data?.error || err.message || 'Something went wrong');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -25,6 +32,12 @@ export default function Create_post() {
             View Feeds →
           </Link>
         </div>
+
+        {error && (
+          <div className="mb-4 rounded-xl border border-red-700 bg-red-950/50 p-3 text-sm text-red-300">
+            {error}
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <input
