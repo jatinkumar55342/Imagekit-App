@@ -1,5 +1,7 @@
 # ImageKit Posts App
 
+[Live Deployment](https://imagekit-app-seven.vercel.app/)
+
 A full-stack MERN application that uploads images to **ImageKit**, stores hosted image URLs and captions in **MongoDB Atlas**, and displays them on a responsive feeds page.
 
 ---
